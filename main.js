@@ -2,7 +2,8 @@ import "babel-polyfill"
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { compose, createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import { compose, createStore, applyMiddleware, } from 'redux';
 import createSagaMiddleware from 'redux-saga'
 
 import Main from './components/main'
@@ -20,10 +21,4 @@ const store = createStore(
   ));
 sagaMiddleware.run(rootSaga);
 
-function render() {
-  ReactDOM.render(
-    <Main store={store}/>, document.getElementById('root'))
-}
-
-render();
-store.subscribe(render)
+ReactDOM.render(<Provider store={store}><Main/></Provider>, document.getElementById('root'));

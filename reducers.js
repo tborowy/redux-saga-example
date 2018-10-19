@@ -1,35 +1,24 @@
 import { combineReducers } from 'redux';
+import { GET_RANDOM_CAT, GET_RANDOM_CAT_ERROR, RANDOM_CAT } from "./actions/actionsList";
 
 
 
-function userReducer(state = 0, action = null) {
+function catReducer(state = {loading: false}, action = null) {
   switch (action.type) {
-    case 'USERS':
-      console.log(action);
-      return state+1;
+    case RANDOM_CAT:
+      return {...action.payload, loading:false, error: null};
+    case GET_RANDOM_CAT:
+      return {...state, loading:true};
+    case GET_RANDOM_CAT_ERROR:
+      return {...state, loading:false, error: {message: action.payload.message, stack: action.payload.stack}};
     default:
       return state;
   }
 }
-
-
-function errorReducer(state = null, action = null) {
-  switch (action.type) {
-    case 'ERROR':
-      console.log(action);
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-
-
 
 
 const rootReducer = combineReducers({
-  users: userReducer,
-  error: errorReducer
+  cat: catReducer
 });
 
 export default rootReducer;

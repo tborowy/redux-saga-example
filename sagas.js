@@ -1,24 +1,23 @@
-import { delay } from 'redux-saga'
+import { delay } from 'redux-saga';
 import { put, takeEvery, all } from 'redux-saga/effects'
+import { GET_RANDOM_CAT, GET_RANDOM_CAT_ERROR, RANDOM_CAT } from "./actions/actionsList";
 
-function randomIntFromInterval(min,max) // min and max included
-{
-  return Math.floor(Math.random()*(max-min+1)+min);
+function* getCat() {
+  yield delay(500);
+  try {
+    const cat = yield fetch('https://aws.random.cat/meow').then(res => res.json());
+    yield put({ type: RANDOM_CAT, payload: cat });
+  } catch (e) {
+    yield put({ type: GET_RANDOM_CAT_ERROR, payload: e });
+  }
 }
 
-function* getUsers() {
-  yield delay(1000);
-  const type = randomIntFromInterval(0,1) ? 'USERS' : 'ERROR';
-  yield put({ type: type, payload: randomIntFromInterval(100, 999) })
-}
-
-
-function* watchUsers() {
-  yield takeEvery('GET_USERS', getUsers)
+function* watchCat() {
+  yield takeEvery(GET_RANDOM_CAT, getCat)
 }
 
 export default function* rootSaga() {
   yield all([
-    watchUsers()
+    watchCat()
   ])
 }

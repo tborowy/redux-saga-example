@@ -1,14 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {getRandomCat} from '../actions/actionsList';
 
 const Main = (props) => {
-  const action = type => props.store.dispatch({type});
   return <div>
-    <button onClick={()=>action('GET_USERS')}>Action with Fake Api Call (Resolved)</button>
-    <button>Action with Fake Api Call (Rejected)</button>
+    <button onClick={props.getRandomCat}>Get random Cat</button>
     <fieldset>
       <legend>State</legend>
       <pre>
-      {JSON.stringify(props.store.getState())}
+      {JSON.stringify(props.state, ' ', 2)}
     </pre>
     </fieldset>
   </div>;
@@ -20,4 +21,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default Main;
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getRandomCat
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
